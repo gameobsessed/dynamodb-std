@@ -1,0 +1,74 @@
+{
+  "name": "dynamodb-std",
+  "description": "DynamoDB Single Table Design Implementation (aws-sdk-v3 compatible)",
+  "version": "0.1.0",
+  "private": false,
+  "license": "MIT",
+  "author": "Denis Zatsepin <denis@zatsepin.me>",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -d",
+    "test": "jest",
+    "lint": "eslint --cache --fix",
+    "prepublish": "npm run lint && npm run build"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gameobsessed/dynamodb-std.git"
+  },
+  "keywords": [
+    "aws",
+    "dynamodb",
+    "singletabledesign",
+    "std",
+    "aws-sdk-v3"
+  ],
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.4.0",
+    "@aws-sdk/lib-dynamodb": "^3.17.0",
+    "@aws-sdk/util-dynamodb": "^3.4.0",
+    "@aws/dynamodb-expressions": "^0.7.3",
+    "source-map-support": "^0.5.16",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "11.0.0",
+    "@commitlint/config-conventional": "11.0.0",
+    "@commitlint/top-level": "11.0.0",
+    "@types/jest": "^27.0.1",
+    "@types/node": "16.9.1",
+    "@types/uuid": "^8.3.1",
+    "@typescript-eslint/eslint-plugin": "4.15.0",
+    "@typescript-eslint/parser": "4.15.0",
+    "aws-sdk": "^2.987.0",
+    "eslint": "7.21.0",
+    "eslint-config-prettier": "7.2.0",
+    "eslint-config-standard": "16.0.2",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-prettier": "3.3.1",
+    "eslint-plugin-promise": "4.3.1",
+    "eslint-plugin-standard": "5.0.0",
+    "husky": "5.1.3",
+    "jest": "^27.0.3",
+    "lint-staged": "10.5.4",
+    "prettier": "2.2.1",
+    "ts-jest": "^27.0.2",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.1.3"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,md,html,json}": "yarn prettier --write",
+    "src/**/*.{ts}": "yarn eslint --cache --fix"
+  }
+}
