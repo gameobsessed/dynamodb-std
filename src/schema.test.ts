@@ -293,5 +293,15 @@ describe('repository', () => {
         },
       })
     })
+
+    it('should generate scan params', () => {
+      const result = repository.scanParams({ limit: 20 })
+
+      expect(result).toEqual({
+        Limit: 20,
+        TableName: 'table',
+        IndexName: 'pk',
+      })
+    })
   })
 })

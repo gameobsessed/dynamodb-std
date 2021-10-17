@@ -4,6 +4,7 @@ import {
   GetCommandInput,
   PutCommandInput,
   QueryCommandInput,
+  ScanCommandInput,
 } from '@aws-sdk/lib-dynamodb'
 import {
   ConditionExpressionPredicate,
@@ -50,6 +51,12 @@ export interface IQueryParams {
   startKey?: IPageToken
 }
 
+export interface IScanParams {
+  indexName?: IndexName
+  startKey?: IPageToken
+  limit: number
+}
+
 export class Schema<T> {
   storage: Storage
   schema: Partial<Record<IndexName, IKeyGenerator<T>>>
@@ -81,9 +88,9 @@ export class Schema<T> {
   }
 
   indexData(entity: Partial<T>, indexName?: IndexName) {
-    const indexes: IndexName[] = (
-      indexName ? [indexName] : Object.keys(this.schema)
-    ) as IndexName[]
+    const indexes: IndexName[] = (indexName
+      ? [indexName]
+      : Object.keys(this.schema)) as IndexName[]
 
     return indexes.reduce((acc, index) => {
       const schema = this.schema[index]
@@ -142,9 +149,9 @@ export class Schema<T> {
     const sortType = typeof sort
     const indexHashKey = this.storage.getKeyName(indexName, 'hash')!
     const indexSortKey = this.storage.getKeyName(indexName, 'sort')
-    const sortPredicate = (
-      sortType === 'string' || sortType === 'number' ? equals(sort) : sort
-    ) as ConditionExpressionPredicate
+    const sortPredicate = (sortType === 'string' || sortType === 'number'
+      ? equals(sort)
+      : sort) as ConditionExpressionPredicate
     const sortConditions = sort && { subject: indexSortKey, ...sortPredicate }
     const indexConditions: ConditionExpression = {
       type: 'And',
@@ -182,6 +189,33 @@ export class Schema<T> {
           }
         ),
     }
+  }
+
+  scanParams({
+    indexName = 'pk',
+    startKey,
+    limit,
+  }: IScanParams): ScanCommandInput {
+    const indexHashKey = this.storage.getKeyName(indexName, 'hash')!
+    const indexSortKey = this.storage.getKeyName(indexName, 'sort')
+
+    return Object.assign(
+      {
+        Limit: limit,
+        TableName: this.storage.tableName,
+        IndexName: indexName,
+      },
+      startKey && {
+        ExclusiveStartKey: Object.assign(
+          {
+            [indexHashKey]: startKey.hash,
+          },
+          indexSortKey && {
+            [indexSortKey]: startKey.sort,
+          }
+        ),
+      }
+    )
   }
 }
 
