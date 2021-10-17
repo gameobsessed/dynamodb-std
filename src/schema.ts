@@ -191,13 +191,9 @@ export class Schema<T> {
     }
   }
 
-  scanParams({
-    indexName = 'pk',
-    startKey,
-    limit,
-  }: IScanParams): ScanCommandInput {
-    const indexHashKey = this.storage.getKeyName(indexName, 'hash')!
-    const indexSortKey = this.storage.getKeyName(indexName, 'sort')
+  scanParams({ indexName, startKey, limit }: IScanParams): ScanCommandInput {
+    const indexHashKey = this.storage.getKeyName(indexName || 'pk', 'hash')!
+    const indexSortKey = this.storage.getKeyName(indexName || 'pk', 'sort')
 
     return Object.assign(
       {
