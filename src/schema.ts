@@ -22,7 +22,7 @@ export interface KeyConfig {
   delimiter: string
 }
 
-export type KeyFactory<T> = (entity: T) => string
+export type KeyFactory<T> = (entity: T) => string | undefined
 
 export type KeyDefinition<T> = string | string[] | KeyConfig | KeyFactory<T>
 
