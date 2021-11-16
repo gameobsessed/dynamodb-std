@@ -1457,7 +1457,7 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.1.tgz#20f18294f797f2209b5f65c8e3b5c8e8261d127c"
   integrity sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==
 
-"@types/uuid@^8.3.1":
+"@types/uuid@8.3.1":
   version "8.3.1"
   resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-8.3.1.tgz#1a32969cf8f0364b3d8c8af9cc3555b7805df14f"
   integrity sha512-Y2mHTRAbqfFkpjldbkHGY8JIzRN6XqYRliG8/24FcHm2D2PwW24fl5xMRTVGdrb7iMrwCaIEbLWerGIkXuFWVg==
@@ -1731,7 +1731,7 @@ at-least-node@^1.0.0:
   resolved "https://registry.yarnpkg.com/at-least-node/-/at-least-node-1.0.0.tgz#602cd4b46e844ad4effc92a8011a3c46e0238dc2"
   integrity sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==
 
-aws-sdk@^2.987.0:
+aws-sdk@2.987.0:
   version "2.987.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.987.0.tgz#a6e952ae3d3adf352516402d88397fbe2b9e3480"
   integrity sha512-XgMrHWHE3aKg11D4QSlpyLvsGw6mHHiUQuowbswd11k89Q6wEfA+jMbYMC7/jsx3LrH9EKti70qhfZyw/wQIfg==
@@ -3673,7 +3673,7 @@ jest-worker@^27.1.1:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
-jest@^27.0.3:
+jest@27.1.1:
   version "27.1.1"
   resolved "https://registry.yarnpkg.com/jest/-/jest-27.1.1.tgz#49f0497fa0fb07dc78898318cc1b737b5fbf72d8"
   integrity sha512-LFTEZOhoZNR/2DQM3OCaK5xC6c55c1OWhYh0njRsoHX0qd6x4nkcgenkSH0JKjsAGMTmmJAoL7/oqYHMfwhruA==
@@ -4993,7 +4993,7 @@ trim-newlines@^3.0.0:
   resolved "https://registry.yarnpkg.com/trim-newlines/-/trim-newlines-3.0.1.tgz#260a5d962d8b752425b32f3a7db0dcacd176c144"
   integrity sha512-c1PTsA3tYrIsLGkJkzHF+w9F2EyxfXGo4UyJc4pFL++FMjnq0HJS69T3M7d//gKrFKwy429bouPescbjecU+Zw==
 
-ts-jest@^27.0.2:
+ts-jest@27.0.5:
   version "27.0.5"
   resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-27.0.5.tgz#0b0604e2271167ec43c12a69770f0bb65ad1b750"
   integrity sha512-lIJApzfTaSSbtlksfFNHkWOzLJuuSm4faFAfo5kvzOiRAuoN4/eKxVJ2zEAho8aecE04qX6K1pAzfH5QHL1/8w==
@@ -5007,7 +5007,7 @@ ts-jest@^27.0.2:
     semver "7.x"
     yargs-parser "20.x"
 
-ts-node@^10.0.0:
+ts-node@10.2.1:
   version "10.2.1"
   resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-10.2.1.tgz#4cc93bea0a7aba2179497e65bb08ddfc198b3ab5"
   integrity sha512-hCnyOyuGmD5wHleOQX6NIjJtYVIO8bPP8F2acWkB4W06wdlkgyvJtubO/I9NkI88hCFECbsEgoLc0VNkYmcSfw==
@@ -5103,7 +5103,7 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript@^4.1.3:
+typescript@4.4.3:
   version "4.4.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.4.3.tgz#bdc5407caa2b109efd4f82fe130656f977a29324"
   integrity sha512-4xfscpisVgqqDfPaJo5vkd+Qd/ItkoagnHpufr+i2QCHBsNYp+G7UAoyFl8aPtx879u38wPV65rZ8qbGZijalA==
