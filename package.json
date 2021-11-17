@@ -40,7 +40,7 @@
     "@commitlint/config-conventional": "11.0.0",
     "@commitlint/top-level": "11.0.0",
     "@types/jest": "^27.0.1",
-    "@types/node": "16.9.1",
+    "@types/node": "16.11.7",
     "@types/uuid": "8.3.1",
     "@typescript-eslint/eslint-plugin": "4.15.0",
     "@typescript-eslint/parser": "4.15.0",
