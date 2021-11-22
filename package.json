@@ -36,9 +36,9 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@commitlint/cli": "11.0.0",
-    "@commitlint/config-conventional": "11.0.0",
-    "@commitlint/top-level": "11.0.0",
+    "@commitlint/cli": "15.0.0",
+    "@commitlint/config-conventional": "15.0.0",
+    "@commitlint/top-level": "15.0.0",
     "@types/jest": "27.0.1",
     "@types/node": "16.11.9",
     "@types/uuid": "8.3.3",
