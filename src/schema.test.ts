@@ -294,6 +294,28 @@ describe('repository', () => {
       })
     })
 
+    it('should generate query params', () => {
+      const result = repository.queryParams({
+        indexName: 's1k',
+        keyParams: entity,
+        limit: 20,
+      })
+
+      expect(result).toEqual({
+        Limit: 20,
+        TableName: 'table',
+        IndexName: 's1k',
+        KeyConditionExpression: '#attr0 = :val1',
+        ExpressionAttributeNames: {
+          '#attr0': '_s1h',
+        },
+        ExpressionAttributeValues: {
+          ':val1': 'type:game',
+        },
+        ExclusiveStartKey: undefined,
+      })
+    })
+
     it('should generate scan params', () => {
       const result = repository.scanParams({ limit: 20 })
 

@@ -43,10 +43,11 @@ export interface IRepositoryParams<T> {
   schema: Partial<ISchemaDefinition<T>>
 }
 
-export interface IQueryParams {
+export interface IQueryParams<T = undefined> {
   limit: number
   indexName: IndexName
-  hash: string | number
+  keyParams?: Partial<T>
+  hash?: string | number
   sort?: string | number | ConditionExpressionPredicate
   startKey?: IPageToken
 }
@@ -87,10 +88,10 @@ export class Schema<T> {
     )
   }
 
-  indexData(entity: Partial<T>, indexName?: IndexName) {
-    const indexes: IndexName[] = (indexName
-      ? [indexName]
-      : Object.keys(this.schema)) as IndexName[]
+  indexData(entity: Partial<T>, indexName?: IndexName): Record<string, any> {
+    const indexes: IndexName[] = (
+      indexName ? [indexName] : Object.keys(this.schema)
+    ) as IndexName[]
 
     return indexes.reduce((acc, index) => {
       const schema = this.schema[index]
@@ -140,25 +141,35 @@ export class Schema<T> {
 
   queryParams({
     indexName,
+    keyParams,
     hash,
     sort,
     startKey,
     limit,
-  }: IQueryParams): QueryCommandInput {
+  }: IQueryParams<T>): QueryCommandInput {
     const indexExpressionAttributes = new ExpressionAttributes()
     const sortType = typeof sort
     const indexHashKey = this.storage.getKeyName(indexName, 'hash')!
     const indexSortKey = this.storage.getKeyName(indexName, 'sort')
-    const sortPredicate = (sortType === 'string' || sortType === 'number'
-      ? equals(sort)
-      : sort) as ConditionExpressionPredicate
+    const sortPredicate = (
+      sortType === 'string' || sortType === 'number' ? equals(sort) : sort
+    ) as ConditionExpressionPredicate
     const sortConditions = sort && { subject: indexSortKey, ...sortPredicate }
+
+    if (hash === undefined && keyParams === undefined) {
+      throw new Error(
+        'Either "hash" or "keyParams" parameter should be provided'
+      )
+    }
+
+    const indexHashValue =
+      hash || this.indexData(keyParams!, indexName)[indexHashKey]
     const indexConditions: ConditionExpression = {
       type: 'And',
       conditions: [
         {
           subject: indexHashKey,
-          ...equals(hash),
+          ...equals(indexHashValue),
         },
         sort && sortConditions,
       ].filter(Boolean) as ConditionExpression[],
@@ -191,9 +202,13 @@ export class Schema<T> {
     }
   }
 
-  scanParams({ indexName, startKey, limit }: IScanParams): ScanCommandInput {
-    const indexHashKey = this.storage.getKeyName(indexName || 'pk', 'hash')!
-    const indexSortKey = this.storage.getKeyName(indexName || 'pk', 'sort')
+  scanParams({
+    indexName = 'pk',
+    startKey,
+    limit,
+  }: IScanParams): ScanCommandInput {
+    const indexHashKey = this.storage.getKeyName(indexName, 'hash')!
+    const indexSortKey = this.storage.getKeyName(indexName, 'sort')
 
     return Object.assign(
       {
@@ -271,13 +286,13 @@ function keyFromFunction<T extends Record<string, any>>(
 //     .join(', ')
 // }
 
-function conditionToExpression(condition: Record<string, any>) {
+export function conditionToExpression(condition: Record<string, any>) {
   return Object.keys(condition)
     .map((key) => `${key} = :${key.toLowerCase()}`)
     .join(' AND ')
 }
 
-function conditionsToValues(condition: Record<string, any>) {
+export function conditionsToValues(condition: Record<string, any>) {
   return Object.fromEntries(
     Object.entries(condition).map(([key, value]) => [
       `:${key.toLowerCase()}`,
