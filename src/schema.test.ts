@@ -294,6 +294,34 @@ describe('repository', () => {
       })
     })
 
+    it('should generate query params with filter', () => {
+      const result = repository.queryParams({
+        indexName: 'pk',
+        hash: entity.id,
+        filter: {
+          subject: 'url',
+          ...beginsWith('/categories'),
+        },
+        limit: 20,
+      })
+
+      expect(result).toEqual({
+        Limit: 20,
+        TableName: 'table',
+        IndexName: 'pk',
+        KeyConditionExpression: '#attr0 = :val1',
+        FilterExpression: 'begins_with(#attr2, :val3)',
+        ExpressionAttributeNames: {
+          '#attr0': '_pkh',
+          '#attr2': 'url',
+        },
+        ExpressionAttributeValues: {
+          ':val1': 'aa-123',
+          ':val3': '/categories',
+        },
+      })
+    })
+
     it('should generate query params', () => {
       const result = repository.queryParams({
         indexName: 's1k',
@@ -323,6 +351,29 @@ describe('repository', () => {
         Limit: 20,
         TableName: 'table',
         IndexName: 'pk',
+      })
+    })
+
+    it('should generate scan params with filter', () => {
+      const result = repository.scanParams({
+        limit: 20,
+        filter: {
+          subject: 'url',
+          ...beginsWith('/categories'),
+        },
+      })
+
+      expect(result).toEqual({
+        Limit: 20,
+        TableName: 'table',
+        IndexName: 'pk',
+        FilterExpression: 'begins_with(#attr0, :val1)',
+        ExpressionAttributeNames: {
+          '#attr0': 'url',
+        },
+        ExpressionAttributeValues: {
+          ':val1': '/categories',
+        },
       })
     })
   })

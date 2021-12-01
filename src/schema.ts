@@ -50,12 +50,14 @@ export interface IQueryParams<T = undefined> {
   hash?: string | number
   sort?: string | number | ConditionExpressionPredicate
   startKey?: IPageToken
+  filter?: ConditionExpression
 }
 
 export interface IScanParams {
   indexName?: IndexName
   startKey?: IPageToken
   limit: number
+  filter?: ConditionExpression
 }
 
 export class Schema<T> {
@@ -144,10 +146,11 @@ export class Schema<T> {
     keyParams,
     hash,
     sort,
+    filter,
     startKey,
     limit,
   }: IQueryParams<T>): QueryCommandInput {
-    const indexExpressionAttributes = new ExpressionAttributes()
+    const expressionAttributes = new ExpressionAttributes()
     const sortType = typeof sort
     const indexHashKey = this.storage.getKeyName(indexName, 'hash')!
     const indexSortKey = this.storage.getKeyName(indexName, 'sort')
@@ -175,20 +178,21 @@ export class Schema<T> {
       ].filter(Boolean) as ConditionExpression[],
     }
 
-    const expression = serializeConditionExpression(
+    const keyExpression = serializeConditionExpression(
       indexConditions,
-      indexExpressionAttributes
+      expressionAttributes
     )
+
+    const filterExpression =
+      filter && serializeConditionExpression(filter, expressionAttributes)
 
     return {
       Limit: limit,
       TableName: this.storage.tableName,
       IndexName: indexName,
-      KeyConditionExpression: expression,
-      ExpressionAttributeNames: indexExpressionAttributes.names,
-      ExpressionAttributeValues: unmarshall(
-        indexExpressionAttributes.values as any
-      ),
+      KeyConditionExpression: keyExpression,
+      ExpressionAttributeNames: expressionAttributes.names,
+      ExpressionAttributeValues: unmarshall(expressionAttributes.values as any),
       ExclusiveStartKey:
         startKey &&
         Object.assign(
@@ -199,6 +203,7 @@ export class Schema<T> {
             [indexSortKey]: startKey.sort,
           }
         ),
+      FilterExpression: filterExpression,
     }
   }
 
@@ -206,9 +211,13 @@ export class Schema<T> {
     indexName = 'pk',
     startKey,
     limit,
+    filter,
   }: IScanParams): ScanCommandInput {
     const indexHashKey = this.storage.getKeyName(indexName, 'hash')!
     const indexSortKey = this.storage.getKeyName(indexName, 'sort')
+    const expressionAttributes = new ExpressionAttributes()
+    const filterExpression =
+      filter && serializeConditionExpression(filter, expressionAttributes)
 
     return Object.assign(
       {
@@ -224,6 +233,13 @@ export class Schema<T> {
           indexSortKey && {
             [indexSortKey]: startKey.sort,
           }
+        ),
+      },
+      filter && {
+        FilterExpression: filterExpression,
+        ExpressionAttributeNames: expressionAttributes.names,
+        ExpressionAttributeValues: unmarshall(
+          expressionAttributes.values as any
         ),
       }
     )
