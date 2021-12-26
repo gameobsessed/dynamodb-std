@@ -1,5 +1,6 @@
 import { unmarshall } from '@aws-sdk/util-dynamodb'
 import {
+  BatchGetCommandInput,
   DeleteCommandInput,
   GetCommandInput,
   PutCommandInput,
@@ -129,6 +130,16 @@ export class Schema<T> {
     return {
       TableName: this.storage.tableName,
       Key: indexData,
+    }
+  }
+
+  batchGetParams(keyParams: Partial<T>[]): BatchGetCommandInput {
+    return {
+      RequestItems: {
+        [this.storage.tableName]: {
+          Keys: keyParams.map((params) => this.indexData(params, 'pk')),
+        },
+      },
     }
   }
 
