@@ -197,25 +197,24 @@ export class Schema<T> {
     const filterExpression =
       filter && serializeConditionExpression(filter, expressionAttributes)
 
-    return {
-      Limit: limit,
-      TableName: this.storage.tableName,
-      IndexName: indexName,
-      KeyConditionExpression: keyExpression,
-      ExpressionAttributeNames: expressionAttributes.names,
-      ExpressionAttributeValues: unmarshall(expressionAttributes.values as any),
-      ExclusiveStartKey:
-        startKey &&
-        Object.assign(
-          {
-            [indexHashKey]: startKey.hash,
-          },
-          indexSortKey && {
-            [indexSortKey]: startKey.sort,
-          }
+    return Object.assign(
+      {
+        Limit: limit,
+        TableName: this.storage.tableName,
+        IndexName: indexName,
+        KeyConditionExpression: keyExpression,
+        ExpressionAttributeNames: expressionAttributes.names,
+        ExpressionAttributeValues: unmarshall(
+          expressionAttributes.values as any
         ),
-      FilterExpression: filterExpression,
-    }
+      },
+      startKey && {
+        ExclusiveStartKey: startKey,
+      },
+      filterExpression && {
+        FilterExpression: filterExpression,
+      }
+    )
   }
 
   scanParams({
@@ -224,8 +223,6 @@ export class Schema<T> {
     limit,
     filter,
   }: IScanParams): ScanCommandInput {
-    const indexHashKey = this.storage.getKeyName(indexName, 'hash')!
-    const indexSortKey = this.storage.getKeyName(indexName, 'sort')
     const expressionAttributes = new ExpressionAttributes()
     const filterExpression =
       filter && serializeConditionExpression(filter, expressionAttributes)
@@ -237,14 +234,7 @@ export class Schema<T> {
         IndexName: indexName,
       },
       startKey && {
-        ExclusiveStartKey: Object.assign(
-          {
-            [indexHashKey]: startKey.hash,
-          },
-          indexSortKey && {
-            [indexSortKey]: startKey.sort,
-          }
-        ),
+        ExclusiveStartKey: startKey,
       },
       filter && {
         FilterExpression: filterExpression,
