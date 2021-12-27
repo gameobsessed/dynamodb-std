@@ -12,7 +12,6 @@ import {
   ExpressionAttributes,
   ConditionExpression,
   equals,
-  beginsWith,
   serializeConditionExpression,
 } from '@aws/dynamodb-expressions'
 import { IndexName, Storage } from './storage'

@@ -1,12 +1,8 @@
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb'
 
-export interface IPageToken {
-  index: string
-  hash: string | number
-  sort?: string | number
-}
+export type IPageToken = Record<string, any>
 
-export function encodeToken(token: Record<string, any>): string {
+export function encodeToken(token: IPageToken): string {
   return Buffer.from(JSON.stringify(marshall(token))).toString('base64')
 }
 
