@@ -7,7 +7,7 @@ export interface IPageToken {
 }
 
 export function encodeToken(token: Record<string, any>): string {
-  return Buffer.from(JSON.stringify(marshall({ token }))).toString('base64')
+  return Buffer.from(JSON.stringify(marshall(token))).toString('base64')
 }
 
 export function decodeToken(token: string): IPageToken {
