@@ -217,7 +217,7 @@ export class Schema<T> {
   }
 
   scanParams({
-    indexName = 'pk',
+    indexName,
     startKey,
     limit,
     filter,
@@ -230,7 +230,7 @@ export class Schema<T> {
       {
         Limit: limit,
         TableName: this.storage.tableName,
-        IndexName: indexName,
+        IndexName: indexName === 'pk' ? undefined : indexName,
       },
       startKey && {
         ExclusiveStartKey: startKey,
