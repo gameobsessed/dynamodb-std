@@ -1,7 +1,7 @@
 {
   "name": "dynamodb-std",
   "description": "DynamoDB Single Table Design Implementation (aws-sdk-v3 compatible)",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "private": false,
   "license": "MIT",
   "author": "Denis Zatsepin <denis@zatsepin.me>",
