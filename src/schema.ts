@@ -49,6 +49,7 @@ export interface IQueryParams<T = undefined> {
   keyParams?: Partial<T>
   hash?: string | number
   sort?: string | number | ConditionExpressionPredicate
+  scanIndexForward?: boolean
   startKey?: IPageToken
   filter?: ConditionExpression
 }
@@ -159,6 +160,7 @@ export class Schema<T> {
     filter,
     startKey,
     limit,
+    scanIndexForward = true,
   }: IQueryParams<T>): QueryCommandInput {
     const expressionAttributes = new ExpressionAttributes()
     const sortType = typeof sort
@@ -206,6 +208,7 @@ export class Schema<T> {
         ExpressionAttributeValues: unmarshall(
           expressionAttributes.values as any
         ),
+        ScanIndexForward: scanIndexForward,
       },
       startKey && {
         ExclusiveStartKey: startKey,
