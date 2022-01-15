@@ -1,6 +1,7 @@
 import { unmarshall } from '@aws-sdk/util-dynamodb'
 import {
   BatchGetCommandInput,
+  BatchWriteCommandInput,
   DeleteCommandInput,
   GetCommandInput,
   PutCommandInput,
@@ -124,6 +125,21 @@ export class Schema<T> {
     }
   }
 
+  batchPutParams(entities: T[]): BatchWriteCommandInput {
+    return {
+      RequestItems: {
+        [this.storage.tableName]: entities.map((entity) => ({
+          PutRequest: {
+            Item: {
+              ...entity,
+              ...this.indexData(entity),
+            },
+          },
+        })),
+      },
+    }
+  }
+
   getParams(keyParams: Partial<T>): GetCommandInput {
     const indexData = this.indexData(keyParams, 'pk')
 
@@ -149,6 +165,20 @@ export class Schema<T> {
     return {
       TableName: this.storage.tableName,
       Key: indexData,
+    }
+  }
+
+  batchDeleteParams(keyParams: Partial<T>[]): BatchWriteCommandInput {
+    return {
+      RequestItems: {
+        [this.storage.tableName]: keyParams.map((params) => ({
+          DeleteRequest: {
+            Key: {
+              ...this.indexData(params, 'pk'),
+            },
+          },
+        })),
+      },
     }
   }
 
