@@ -1,11 +1,14 @@
 # dynamodb-std
 Simple DynamoDB single-table design implementation (aws-sdk-v3 compatible)
 
-This library is in the early stage of development, not feature full and not stable. DON'T USE IT IN PRODUCTION CODE.
+## DON'T USE IT IN PRODUCTION CODE
+Although we do, this library is in the early stage of development, not feature full, and doesn't have a stable API, which means it may have breaking changes at any time. 
 
-# Usage
-In accordance with [single-table design](https://www.youtube.com/watch?v=BnDKD_Zv0og) all the data you need in your application or microservice you
-may store in one DynamoDB table. With `dynamodb-std`, you may defined this table using Storage:
+## DO USE IT FOR TESTING AND LEARNING STD
+Please, give this library a chance, try it out, and give your feedback. If you find any issues, please use GitHub to report and we will try to fix them. It would be even better if you take an active part in the development of this library.
+
+## Usage
+In accordance with [single-table design](https://www.youtube.com/watch?v=BnDKD_Zv0og) all the data you need for a [domain](https://en.wikipedia.org/wiki/Domain-driven_design) in your application or microservice you may store in one DynamoDB table. With `dynamodb-std`, you may defined this table using Storage:
 
 ```typescript
 import { Storage } from 'dynamodb-std'
@@ -16,7 +19,7 @@ export const storage = new Storage({
 })
 ```
 
-Then, for each data model you have in you application, you need to define Schema: 
+Then, for each data model you have in you application, you need to define a schema: 
 
 ```typescript
 export interface IUser {
